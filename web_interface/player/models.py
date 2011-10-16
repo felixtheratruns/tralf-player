@@ -11,6 +11,9 @@ class Player(models.Model):
     def was_published_today(self):
         return self.pub_date.date() == datetime.date.today()
     was_published_today.short_description = 'Published today?'
+    file_id = models.CharField(max_length=200)
+    frame_id_start = models.IntegerField(default=0)
+    frame_id_stop = models.IntegerField(default=0)
 
 class Choice(models.Model):
     player = models.ForeignKey(Player)
@@ -19,5 +22,12 @@ class Choice(models.Model):
     def __unicode__(self):
         return self.choice
 
-    
+class Frame(models.Model):
+    player = models.ForeignKey(Player)
+    frame_text = models.TextField()  
+    commit_dtime = models.DateTimeField('date committed')
+    line_num_mod = models.IntegerField() 
+#    commit_time = models.
+
+
 

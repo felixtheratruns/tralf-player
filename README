@@ -1,0 +1,6 @@
+Rez to get this working you will need to change the path in the settings.py file for the templates. It is an absolute path. Also note the django db path is a relative path, but you can change it if you want the db stored somewhere else.
+
+Love, 
+Joel
+
+
