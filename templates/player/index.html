@@ -1,3 +1,17 @@
+    <li><a href="/player/loadnewplayer/">"load new player"</a></li>
+
+<h1>{{ player.question }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/player/loadnewplayer/" method="post">
+{% csrf_token %}
+    <input type="file" name="path" id="path"/>
+    <label for="path">"path"</label><br />
+<input type="submit" value="upload" />
+</form>
+
+
 {% if latest_player_list %}
     <ul>
     {% for player in latest_player_list %}

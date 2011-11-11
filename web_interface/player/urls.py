@@ -15,6 +15,7 @@ urlpatterns = patterns('',
         DetailView.as_view(
             model=Player,
             template_name='player/detail.html')),
+    (r'^loadnewplayer/$', 'player.views.loadnewplayer'),
     url(r'^(?P<pk>\d+)/results/$',
         DetailView.as_view(
             model=Player,
