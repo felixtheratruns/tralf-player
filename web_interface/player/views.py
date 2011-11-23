@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, Context, loader
 from player.models import Choice, Player
-from datetime import * 
+from datetime import datetime 
 
 def index(request):
     latest_player_list = Player.objects.all().order_by('-pub_date')[:5]
@@ -18,9 +18,17 @@ def detail(request, player_id):
 
      
 def loadnewplayer(request):
-    path = request.POST['path']
+    print "request ",request.POST
+    for key in request.POST.iterkeys():
+        print "key:"+key
 #    true = True
-    player = Player.objects.create(file_id=path, pub_date=datetime.now().date())
+#    full_path = request.FILES['path']
+    file_ob = request.FILES['file_ob']    
+    file_name = request.FILES['file_ob'].name
+    print "file name ........"+file_name
+    interface = DjangoInterface(file_ob.temporary_file_path)    
+
+    player = Player.objects.create(question="how is "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=1)
     player.save()
     player_id = player.id
     p = get_object_or_404(player, pk=player_id)

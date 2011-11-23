@@ -1,15 +1,17 @@
-    <li><a href="/player/loadnewplayer/">"load new player"</a></li>
+<li><a href="/player/loadnewplayer/">"load new player"</a></li>
 
 <h1>{{ player.question }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
-<form action="/player/loadnewplayer/" method="post">
+<form action="/player/loadnewplayer/" method="post" enctype="multipart/form-data">
 {% csrf_token %}
-    <input type="file" name="path" id="path"/>
+    <input type="file" name="file_ob" id="path"/>
     <label for="path">"path"</label><br />
 <input type="submit" value="upload" />
 </form>
+
+<!-- form needs this for the file to contain data: enctype="multipart/form-data" -->
 
 
 {% if latest_player_list %}

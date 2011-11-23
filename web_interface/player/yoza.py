@@ -107,7 +107,7 @@ class GitManager():
     def __init__(self, filename):
         """Initiate Attributes"""
         self.fname = filename
-        hdir = "../../.tralf/"
+        hdir = ".tralf/"
         if not os.path.exists(hdir):
             print "Error: No Tralf data directory found!"
         self.dirname = hdir + "." + self.fname + "/"  #Check for .tralf/.<fiename>

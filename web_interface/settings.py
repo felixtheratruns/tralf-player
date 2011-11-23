@@ -60,6 +60,18 @@ ADMIN_MEDIA_PREFIX = '/media/'
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'y=$-)y*4efq2j=x(h-r208444*7i+_=s+*l#$*b6c_e&_@bype'
 
+STATICFILES_DIRS = (
+    "/home/joel/tralf_root",
+)
+
+STATIC_ROOT = (
+    "/home/joel/tralf/django-tralf-interface/web_interface/tralf_static"
+)
+
+STATIC_URL = (
+    "/static/"
+)
+
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -85,6 +97,8 @@ TEMPLATE_DIRS = (
 )
 
 INSTALLED_APPS = (
+    'grappelli',
+    'filebrowser',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -92,6 +106,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'player',
+    'django.contrib.staticfiles',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
