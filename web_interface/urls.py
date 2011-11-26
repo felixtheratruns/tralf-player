@@ -9,8 +9,8 @@ admin.autodiscover()
 urlpatterns = patterns('',
     (r'^player/', include('player.urls')),
     url(r'^admin/filebrowser/', include(site.urls)),
+    (r'^grappelli/', include('grappelli.urls')),  
     (r'^admin/', include(admin.site.urls)),
-    
     # Example:
     # (r'^mysite/', include('mysite.foo.urls')),
 

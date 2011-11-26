@@ -46,18 +46,18 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT ='' 
+MEDIA_ROOT ='/home/joel/tralf/django_tralf_interface/web_interface' 
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/home/joel/tralf/django-tralf-interface/web_interface/static'
+STATIC_ROOT = '/home/joel/tralf/django_tralf_interface/web_interface/static'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -66,7 +66,7 @@ STATIC_URL = '/static/'
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/static/admin/'
+ADMIN_MEDIA_PREFIX = STATIC_URL + "grappelli/"
 
 STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
@@ -90,6 +90,12 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.core.context_processors.auth",
+    "django.core.context_processors.request",
+)
+
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -102,7 +108,7 @@ ROOT_URLCONF = 'web_interface.urls'
 
 
 TEMPLATE_DIRS = (
-    "/home/joel/tralf/django-tralf-interface/templates",
+    "/home/joel/tralf/django_tralf_interface/templates",
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -125,7 +131,6 @@ INSTALLED_APPS = (
     # 'django.contrib.admindocs',
 )
 
-
 FILEBROWSER_MEDIA_ROOT = MEDIA_ROOT
 FILEBROWSER_MEDIA_URL = MEDIA_URL
 FILEBROWSER_DIRECTORY = 'media/uploads/'
@@ -134,6 +139,9 @@ FILEBROWSER_PATH_FILEBROWSER_MEDIA = os.path.join(STATIC_ROOT, 'filebrowser/')
 
 #FILEBROWSER_URL_TINYMCE = ADMIN_MEDIA_PREFIX + "tinymce/jscripts/tiny_mce/"
 #FILEBROWSER_PATH_TINYMCE =ADMIN_MEDIA_PREFIX + "tinymce/jscripts/tiny_mce/"
+GRAPPELLI_ADMIN_TITLE = 'tralf'
+
+GRAPPELLI_ADMIN_URL = '/admin/'
 
 
 FILEBROWSER_EXTENSIONS={
