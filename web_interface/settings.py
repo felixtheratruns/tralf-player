@@ -146,6 +146,7 @@ GRAPPELLI_ADMIN_URL = '/admin/'
 
 FILEBROWSER_EXTENSIONS={
     'Image': ['.jpg','.jpeg','.gif','.png','.tif','.tiff'],
+    'Zip' : ['.zip'],
     'Document': ['.pdf','.doc','.rtf','.txt','.xls','.csv'],
     'Video': ['.mov','.wmv','.mpeg','.mpg','.avi','.rm'],
     'Audio': ['.mp3','.mp4','.wav','.aiff','.midi','.m4p']
@@ -154,6 +155,7 @@ FILEBROWSER_EXTENSIONS={
 FILEBROWSER_SELECT_FORMATS =  {
     'file': ['Folder','Image','Document','Video','Audio'],
     'image': ['Image'],
+    'zip' : ['Zip'],
     'document': ['Document'],
     'media': ['Video','Audio'],
 }

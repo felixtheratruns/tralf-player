@@ -44,33 +44,47 @@ class Media(models.Model):
         null=True,help_text="Upload a video/image/swf, zipped slideshow, etc.")
     #...
     
-        
+    print "media is being executed"        
     def post_upload_callback(sender, **kwargs):
+        print "the function is being executed"
+
         """
         Signal receiver called each time an upload has finished.
         Triggered by Filebrowser's filebrowser_post_upload signal:
         http://code.google.com/p/django-filebrowser/wiki/signals .
         We'll use this to unzip .zip files in place when/if they're uploaded.
         """
-
+        print list(kwargs.iterkeys())
+        print kwargs['file'].extension
         if kwargs['file'].extension == ".zip":
+            print "ok pass kwargs"
             # Note: this doesn't test for corrupt zip files. 
             # If encountered, user will get an HTTP Error 
             # and file will remain on the server.
 
             # We get returned relative path names from Filebrowser
-            path = kwargs['path'] 
+            
+            path = kwargs['path']
+            print "path passed" 
             thefile = kwargs['file'] 
-            
+            print "path gotten"
             # Convert file and dir into absolute paths
-            fullpath = os.path.join(settings.MEDIA_ROOT,thefile.path_relative)
+            print thefile
+            fullpath = os.path.join(settings.MEDIA_ROOT,settings.FILEBROWSER_DIRECTORY,str(thefile))
+
+            print "full path"
+
             dirname = os.path.dirname(fullpath)
-            
+            print "dir name"
+            print fullpath
             # Get a real Python file handle on the uploaded file
             fullpathhandle = open(fullpath, 'r') 
 
+            print "fph"
             # Unzip the file, creating subdirectories as needed
             zfobj = zipfile.ZipFile(fullpathhandle)
+    
+            print "zip file opened:",zfobj
             for name in zfobj.namelist():
                 if name.endswith('/'):
                     try: # Don't try to create a directory if exists
