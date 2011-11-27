@@ -44,9 +44,7 @@ class Media(models.Model):
         null=True,help_text="Upload a video/image/swf, zipped slideshow, etc.")
     #...
     
-    print "media is being executed"        
     def post_upload_callback(sender, **kwargs):
-        print "the function is being executed"
 
         """
         Signal receiver called each time an upload has finished.
@@ -57,7 +55,6 @@ class Media(models.Model):
         print list(kwargs.iterkeys())
         print kwargs['file'].extension
         if kwargs['file'].extension == ".zip":
-            print "ok pass kwargs"
             # Note: this doesn't test for corrupt zip files. 
             # If encountered, user will get an HTTP Error 
             # and file will remain on the server.
@@ -65,49 +62,69 @@ class Media(models.Model):
             # We get returned relative path names from Filebrowser
             
             path = kwargs['path']
-            print "path passed" 
             thefile = kwargs['file'] 
-            print "path gotten"
             # Convert file and dir into absolute paths
             print thefile
             fullpath = os.path.join(settings.MEDIA_ROOT,settings.FILEBROWSER_DIRECTORY,str(thefile))
 
-            print "full path"
 
             dirname = os.path.dirname(fullpath)
-            print "dir name"
-            print fullpath
             # Get a real Python file handle on the uploaded file
             fullpathhandle = open(fullpath, 'r') 
 
-            print "fph"
             # Unzip the file, creating subdirectories as needed
             zfobj = zipfile.ZipFile(fullpathhandle)
-    
-            print "zip file opened:",zfobj
-            for name in zfobj.namelist():
-                if name.endswith('/'):
-                    try: # Don't try to create a directory if exists
-                        os.mkdir(os.path.join(dirname, name))
-                    except:
-                        pass
-                else:
-                    outfile = open(os.path.join(dirname, name), 'wb')
-                    outfile.write(zfobj.read(name))
-                    outfile.close()
-                
+            print "extarct1"
+            cur_dir = os.getcwd()
+            os.chdir(dirname)
+            zfobj.extractall()
+            print "extract2"
+            
+            os.chdir(cur_dir)
+#            print "zfobj" 
+#            for name in zfobj.namelist():
+#                
+#                print "name"+name
+#                if name.endswith('/'):
+#                    try: # Don't try to create a directory if exists
+#                        os.mkdir(os.path.join(dirname, name))
+#                    except:
+#                        pass
+#                else:
+#                    if '/' in name:
+#                        names = name.split('/')
+#                    for n in names:
+#                        try:
+#                            
+#                    outfile = open(os.path.join(dirname, name), 'wb')
+#                    outfile.write(zfobj.read(name))
+#                    outfile.close()
+#                
             # Now try and delete the uploaded .zip file and the 
             # stub __MACOSX dir if they exist.
             try:
                 os.remove(fullpath)
             except:
                 pass
-                
-            try:
-                osxjunk = os.path.join(dirname,'__MACOSX')
-                shutil.rmtree(osxjunk)
-            except:
-                pass                
+#                
+#            try:
+#                osxjunk = os.path.join(dirname,'__MACOSX')
+#                shutil.rmtree(osxjunk)
+#            except:
+#                pass                
+#
+#
+#            file_ob =     
+#            file_name = request.FILES['file_ob'].name
+#            print "file name ........"+file_name
+#            interface = DjangoInterface(file_ob.temporary_file_path)    
+#        
+#            player = Player.objects.create(question="how is "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=1)
+#            player.save()
+#            player_id = player.id
+#            p = get_object_or_404(player, pk=player_id)
+# 
+
             
     # Signal provided by FileBrowser on every successful upload. 
     FileBrowserSite.filebrowser_post_upload.connect(post_upload_callback)
