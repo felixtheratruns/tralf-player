@@ -1,11 +1,11 @@
+from yoza import *
 from django.db import models
 from datetime import datetime
 #filebrowser stuff
 from filebrowser.fields import FileBrowseField
 from filebrowser.sites import * 
 import sys, zipfile, os, os.path
-import shutil
- 
+import shutil 
 
 
 # Create your models here.
@@ -46,12 +46,6 @@ class Media(models.Model):
     
     def post_upload_callback(sender, **kwargs):
 
-        """
-        Signal receiver called each time an upload has finished.
-        Triggered by Filebrowser's filebrowser_post_upload signal:
-        http://code.google.com/p/django-filebrowser/wiki/signals .
-        We'll use this to unzip .zip files in place when/if they're uploaded.
-        """
         print list(kwargs.iterkeys())
         print kwargs['file'].extension
         if kwargs['file'].extension == ".zip":
@@ -64,23 +58,45 @@ class Media(models.Model):
             path = kwargs['path']
             thefile = kwargs['file'] 
             # Convert file and dir into absolute paths
-            print thefile
             fullpath = os.path.join(settings.MEDIA_ROOT,settings.FILEBROWSER_DIRECTORY,str(thefile))
-
+#            print "full path"+fullpath
 
             dirname = os.path.dirname(fullpath)
-            # Get a real Python file handle on the uploaded file
-            fullpathhandle = open(fullpath, 'r') 
+            try:
+                # Get a real Python file handle on the uploaded file
+                fullpathhandle = open(fullpath, 'r') 
+#                print "test" 
+               # Unzip the file, creating subdirectories as needed
+                zfobj = zipfile.ZipFile(fullpathhandle)
+#                print "extarct1"
 
-            # Unzip the file, creating subdirectories as needed
-            zfobj = zipfile.ZipFile(fullpathhandle)
-            print "extarct1"
-            cur_dir = os.getcwd()
-            os.chdir(dirname)
-            zfobj.extractall()
-            print "extract2"
-            
-            os.chdir(cur_dir)
+                for el in zfobj.namelist():
+                    print ""
+                    print "element: "+el
+                    elpath = os.path.join(dirname,el)
+                    print "elpath: "+elpath
+                    filedir = os.path.abspath(os.path.join(elpath,os.path.pardir))
+                    #filedir = os.path.splitext(elpath)[0:-1]
+                    print "filedir: "+filedir
+                    if not os.path.exists(filedir):
+                        print "make file dir", filedir
+                        os.makedirs(filedir)
+                    if not os.path.isdir(elpath):
+                        print "extract path "+el+ " "+filedir
+                        zfobj.extract(el,filedir)
+#                    if elpath.endswith("newnormalfile"):
+#                        print "elpath",elpath                        
+#                        break 
+##                cur_dir = os.getcwd()
+#                os.chdir(dirname)
+#                zfobj.extractall()
+#                print "extract2"
+#                os.chdir(cur_dir)
+
+            except:
+                e = sys.exc_info()[1] 
+                print e
+ 
 #            print "zfobj" 
 #            for name in zfobj.namelist():
 #                
@@ -114,22 +130,35 @@ class Media(models.Model):
 #                pass                
 #
 #
-#            file_ob =     
-#            file_name = request.FILES['file_ob'].name
-#            print "file name ........"+file_name
-#            interface = DjangoInterface(file_ob.temporary_file_path)    
-#        
-#            player = Player.objects.create(question="how is "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=1)
-#            player.save()
-#            player_id = player.id
-#            p = get_object_or_404(player, pk=player_id)
+
+            #This part will emulate an interface using the frame-by-frame style
+            
+                            
+            
+
+#            file_name = os.path.splitext(str(thefile))[0]
+#            full_path = os.path.join(dirname,file_name)
+
+#            upload.db_inject(full_path, file_name)               
+            
+
+
+#            frame = Frame.objects.create(player=player_id, frame = 
+#
+#
+#
+#            player = models.ForeignKey(Player)
+#            frame = models.TextField()  
+#            commit_dtime = models.DateTimeField('date committed')
+#            line_num_mod = models.IntegerField() 
+#            def __unicode__(self):
+#                return self.frame
 # 
+#            frame = Frame.objects.create(
 
             
     # Signal provided by FileBrowser on every successful upload. 
     FileBrowserSite.filebrowser_post_upload.connect(post_upload_callback)
 
 #    commit_time = models.
-
-
 

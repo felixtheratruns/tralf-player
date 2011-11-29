@@ -1,14 +1,17 @@
 #!/usr/bin/python
 
+
 import os.path
 import sys
+import os
 from subprocess import call
 import subprocess
 
+
 class DisplayModule():
-    def __init__(self, filename):
+    def __init__(self, path):
         """Initiate Attributes"""
-        self.Git = GitManager(filename)
+        self.Git = GitManager(path)
         self.cur_frame = 0
         self.max_frame = self.Git.fCount()
 
@@ -18,7 +21,7 @@ class DisplayModule():
 
         """
         self.cur_frame += 1
-        if not self._atMax():
+        if not self.atMax():
             return self.getCurFrame()
         else: self.cur_frame -= 1
             #Probably should throw an exception here
@@ -29,7 +32,7 @@ class DisplayModule():
 
         """
         self.cur_frame -= 1
-        if not self._atMin():
+        if not self.atMin():
             return self.getCurFrame()
         else: self.cur_frame += 1
             #Probably should throw an exception here
@@ -60,11 +63,11 @@ class DisplayModule():
         if self.atMax() or self.atMin(): return True
         else: return False
 
-    def _atMax(self):
+    def atMax(self):
         if self.cur_frame >= self.max_frame: return True
         else: return False
         
-    def _atMin(self):
+    def atMin(self):
         if self.cur_frame < 0: return True
         else: return False
 
@@ -76,8 +79,8 @@ class DisplayModule():
 #get_time()
 
 class DjangoInterface():
-    def __init__(self, filename):
-        self.Player = DisplayModule(filename)
+    def __init__(self, path):
+        self.Player = DisplayModule(path)
 
     def nFrameButton(self):
         return self.Player.nFrame()
@@ -93,6 +96,13 @@ class DjangoInterface():
 
     def refresh(self):
         return self.Player.getCurFrame()
+
+    def atMax(self):
+        return self.Player.atMax()
+
+    def atMin(self):
+        return self.Player.atMin()
+
 #start_playback()
 #show_current_version()
 #pause()
@@ -104,13 +114,15 @@ class DjangoInterface():
 #measure_latency_between_classes()
 
 class GitManager():
-    def __init__(self, filename):
+    def __init__(self, path):
         """Initiate Attributes"""
-        self.fname = filename
-        hdir = ".tralf/"
+        
+        self.fname = path.split('/')[-1]
+        directory = os.path.dirname(path)
+        hdir = directory +"/" #+"/.tralf/"
         if not os.path.exists(hdir):
             print "Error: No Tralf data directory found!"
-        self.dirname = hdir + "." + self.fname + "/"  #Check for .tralf/.<fiename>
+        self.dirname = hdir + "." + self.fname + "/"  #Check for .<fname>.tralf/.<fiename>
         os.chdir(self.dirname)
         self.change_index = self._buildTable()
 
@@ -184,10 +196,15 @@ class GitManager():
 #get_time()
 
 
+
+
+
+
+
 #here in the main function we will create a DjangoInterface Object to run the sample.
 if __name__ == '__main__':    
-    fname = sys.argv[1]
-    Interface = DjangoInterface(fname)
+    file_path = sys.argv[1]
+    Interface = DjangoInterface(file_path)
     
     #This part will emulate an interface using the frame-by-frame style
     mode = 1
@@ -197,7 +214,7 @@ if __name__ == '__main__':
     #print disp[1] + "\nEdit at: " + str(disp[0])
     while u_input != 'q':
         i = Interface.checkFrameNum()
-        u_input = raw_input(fname+str(i) + ':')
+        u_input = raw_input(file_path+str(i) + ':')
     
         try:
             i = int(u_input)
@@ -210,7 +227,6 @@ if __name__ == '__main__':
                 disp = Interface.nFrameButton()
             else:
                 disp = Interface.pFrameButton()
-    
         os.system('clear')
         try:
             print str(disp[0]-(print_height/2))

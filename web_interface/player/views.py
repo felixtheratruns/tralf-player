@@ -1,12 +1,15 @@
-# Create your views here.
 from django.db import models
 from yoza import *
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.core.urlresolvers import reverse
 from django.template import RequestContext, Context, loader
-from player.models import Choice, Player
-from datetime import datetime 
+from player.models import Choice, Player, Frame
+from datetime import datetime, date
+import settings
+import os.path
+import sys
+
 
 def index(request):
     latest_player_list = Player.objects.all().order_by('-pub_date')[:5]
@@ -18,33 +21,89 @@ def detail(request, player_id):
 
      
 def loadnewplayer(request):
-    print "request ",request.POST
+    #    print "request ",request.POST
     for key in request.POST.iterkeys():
         print "key:"+key
-#    true = True
-#    full_path = request.FILES['path']
-    file_ob = request.FILES['file_ob']    
-    file_name = request.FILES['file_ob'].name
-    print "file name ........"+file_name
-    interface = DjangoInterface(file_ob.temporary_file_path)    
+    
+    file_name = request.POST['text_ob']
+    full_path = os.path.join(settings.MEDIA_ROOT,settings.FILEBROWSER_DIRECTORY,".tralf",file_name)
 
-    player = Player.objects.create(question="how is "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=1)
-    player.save()
+
+
+    
+    player = Player(question="Do you like "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=0)
+
+    player.save() 
+    choice1 = Choice(player=player, choice="like", votes=0)
+    choice1.save()
+
+       
+    
+    print "player save"
     player_id = player.id
-    p = get_object_or_404(player, pk=player_id)
-    return HttpResponseRedirect(reverse('player_results', args=(p.id,)))
+
+#    player = get_object_or_404(Player, pk=player_id)
 
 
+    Interface = DjangoInterface(full_path)
+ #  p = get_object_or_404(player, pk=player_id)
 
-#    return HttpResponse("Hello, world. You're at the poll index.")
+    mode = 1
+    u_input = 0
+    print_height = 30
+    disp = Interface.refresh()
+
+    frame_id_start = None
+    frame_id_stop = None
+    count = 0
+    temp = None
+    while disp != None:
+        count += 1
+        temp = disp
+        frame_line = disp[0]
+        frame_text = disp[1]
+        frame_dtime = disp[2]
+        frame_time = disp[3] 
+        [year, month, day] = frame_dtime.split('-')
+        [hour, minute, second] = frame_time.split(':')
+
+        print "frame dtime:",frame_dtime
+        print "frame time:",frame_time
+        print "year:",year
+        print "month:", month
+        print "day:",day
+        print "player?",player_id
+        frame = Frame(player=player, 
+                            line_num_mod=int(frame_line),
+                            frame=frame_text,
+                            commit_dtime=datetime(int(year), int(month), int(day), int(hour), int(minute), int(second)))
+
+        frame.save()    
+
+        frame_id_stop = frame.id
+        if count == 1:
+            frame_id_start = frame.id                
+
+        disp = Interface.nFrameButton()
+    print "frame start num",frame_id_start
+    print "frame start num",frame_id_stop 
+    player.frame_num_start = frame_id_start
+    player.frame_num_stop = frame_id_stop
+
+    player.save()
+        #[linenum, frame.stdout.read(), date, time] 
+        
+#    print "request ",request.POST
+#    for key in request.POST.iterkeys():
+#        print "key:"+key
+#    file_ob = request.FILES['file_ob']    
+#    file_name = request.FILES['file_ob'].name
+#    print "file name ........"+file_name
+#    interface = DjangoInterface(file_ob.temporary_file_path)    
+#
+#    player = Player.objects.create(question="how is "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=1)
+    return HttpResponseRedirect(reverse('player_results', args=(player.id,)))
    
-
-#def index(request):
-#    latest_player_list = Player.objects.all().order_by('-pub_date')[:5]
-#    t = loader.get_template('player/index.html')
-#    c = Context({
-#        'latest_player_list': latest_player_list,
-#    })
 
 
 def results(request, player_id):
