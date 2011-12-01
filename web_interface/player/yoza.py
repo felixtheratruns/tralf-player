@@ -119,7 +119,7 @@ class GitManager():
         
         self.fname = path.split('/')[-1]
         directory = os.path.dirname(path)
-        hdir = directory +"/" #+"/.tralf/"
+        hdir = directory +"/.tralf/"
         if not os.path.exists(hdir):
             print "Error: No Tralf data directory found!"
         self.dirname = hdir + "." + self.fname + "/"  #Check for .<fname>.tralf/.<fiename>

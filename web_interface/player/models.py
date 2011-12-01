@@ -70,93 +70,111 @@ class Media(models.Model):
                 zfobj = zipfile.ZipFile(fullpathhandle)
 #                print "extarct1"
 
-                for el in zfobj.namelist():
-                    print ""
-                    print "element: "+el
-                    elpath = os.path.join(dirname,el)
-                    print "elpath: "+elpath
-                    filedir = os.path.abspath(os.path.join(elpath,os.path.pardir))
-                    #filedir = os.path.splitext(elpath)[0:-1]
-                    print "filedir: "+filedir
-                    if not os.path.exists(filedir):
-                        print "make file dir", filedir
-                        os.makedirs(filedir)
-                    if not os.path.isdir(elpath):
-                        print "extract path "+el+ " "+filedir
-                        zfobj.extract(el,filedir)
-#                    if elpath.endswith("newnormalfile"):
-#                        print "elpath",elpath                        
-#                        break 
-##                cur_dir = os.getcwd()
-#                os.chdir(dirname)
-#                zfobj.extractall()
-#                print "extract2"
-#                os.chdir(cur_dir)
+#                for el in zfobj.namelist():
+#                    print ""
+#                    print "element: "+el
+#                    elpath = os.path.join(dirname,el)
+#                    print "elpath: "+elpath
+#                    filedir = os.path.abspath(os.path.join(elpath,os.path.pardir))
+#                    #filedir = os.path.splitext(elpath)[0:-1]
+#                    print "filedir: "+filedir
+#                    if not os.path.exists(filedir):
+#                        print "make file dir", filedir
+#                        os.makedirs(filedir)
+#                    if not os.path.isdir(elpath):
+#                        print "extract path "+el+ " "+filedir
+#                        zfobj.extract(el,filedir)
+
+                cur_dir = os.getcwd()
+                os.chdir(dirname)
+                zfobj.extractall()
+                os.chdir(cur_dir)
 
             except:
                 e = sys.exc_info()[1] 
                 print e
  
-#            print "zfobj" 
-#            for name in zfobj.namelist():
-#                
-#                print "name"+name
-#                if name.endswith('/'):
-#                    try: # Don't try to create a directory if exists
-#                        os.mkdir(os.path.join(dirname, name))
-#                    except:
-#                        pass
-#                else:
-#                    if '/' in name:
-#                        names = name.split('/')
-#                    for n in names:
-#                        try:
-#                            
-#                    outfile = open(os.path.join(dirname, name), 'wb')
-#                    outfile.write(zfobj.read(name))
-#                    outfile.close()
-#                
             # Now try and delete the uploaded .zip file and the 
             # stub __MACOSX dir if they exist.
             try:
                 os.remove(fullpath)
             except:
                 pass
-#                
-#            try:
-#                osxjunk = os.path.join(dirname,'__MACOSX')
-#                shutil.rmtree(osxjunk)
-#            except:
-#                pass                
-#
-#
+           
+            print "before os path",fullpath  
+            file_path = os.path.splitext(fullpath)[0]
+            print "file_path"+file_path
+            file_name = os.path.basename(file_path)
+            print "file name:"+file_name
+            player = Player(question="Do you like "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=0)
+        
+            player.save() 
+            choice1 = Choice(player=player, choice="like", votes=0)
+            choice1.save()
+        
+               
+             
+            print "player save"
+            player_id = player.id
+        
+        #    player = get_object_or_404(Player, pk=player_id)
+                    
+            print "before django" 
 
-            #This part will emulate an interface using the frame-by-frame style
+            try:
+                Interface = DjangoInterface(file_path)
+            except:
+                e = sys.exc_info()[1] 
+                print e
             
-                            
-            
-
-#            file_name = os.path.splitext(str(thefile))[0]
-#            full_path = os.path.join(dirname,file_name)
-
-#            upload.db_inject(full_path, file_name)               
-            
-
-
-#            frame = Frame.objects.create(player=player_id, frame = 
-#
-#
-#
-#            player = models.ForeignKey(Player)
-#            frame = models.TextField()  
-#            commit_dtime = models.DateTimeField('date committed')
-#            line_num_mod = models.IntegerField() 
-#            def __unicode__(self):
-#                return self.frame
-# 
-#            frame = Frame.objects.create(
-
-            
+         #  p = get_object_or_404(player, pk=player_id)
+            print "A" 
+            mode = 1
+            u_input = 0
+            print_height = 30
+            disp = Interface.refresh()
+        
+            frame_id_start = None
+            frame_id_stop = None
+            count = 0
+            temp = None
+            while disp != None:
+                count += 1
+                temp = disp
+                frame_line = disp[0]
+                frame_text = disp[1]
+                frame_dtime = disp[2]
+                frame_time = disp[3] 
+                [year, month, day] = frame_dtime.split('-')
+                [hour, minute, second] = frame_time.split(':')
+        
+                print "frame dtime:",frame_dtime
+                print "frame time:",frame_time
+                print "year:",year
+                print "month:", month
+                print "day:",day
+                print "player?",player_id
+                print frame_text
+                
+                frame = Frame(player=player, 
+                                    line_num_mod=int(frame_line),
+                                    frame=frame_text,
+                                    commit_dtime=datetime(int(year), int(month), int(day), int(hour), int(minute), int(second)))
+        
+                frame.save()    
+        
+                frame_id_stop = frame.id
+                if count == 1:
+                    frame_id_start = frame.id                
+        
+                disp = Interface.nFrameButton()
+            print "frame start num",frame_id_start
+            print "frame start num",frame_id_stop 
+            player.frame_num_start = frame_id_start
+            player.frame_num_stop = frame_id_stop
+        
+            player.save()
+     
     # Signal provided by FileBrowser on every successful upload. 
     FileBrowserSite.filebrowser_post_upload.connect(post_upload_callback)
 

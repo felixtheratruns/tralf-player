@@ -26,7 +26,7 @@ def loadnewplayer(request):
         print "key:"+key
     
     file_name = request.POST['text_ob']
-    full_path = os.path.join(settings.MEDIA_ROOT,settings.FILEBROWSER_DIRECTORY,".tralf",file_name)
+    full_path = os.path.join(settings.MEDIA_ROOT,settings.FILEBROWSER_DIRECTORY,file_name)
 
 
 
@@ -43,7 +43,6 @@ def loadnewplayer(request):
     player_id = player.id
 
 #    player = get_object_or_404(Player, pk=player_id)
-
 
     Interface = DjangoInterface(full_path)
  #  p = get_object_or_404(player, pk=player_id)
@@ -86,11 +85,14 @@ def loadnewplayer(request):
 
         disp = Interface.nFrameButton()
     print "frame start num",frame_id_start
-    print "frame start num",frame_id_stop 
+    print "frame stop num",frame_id_stop 
     player.frame_num_start = frame_id_start
     player.frame_num_stop = frame_id_stop
 
     player.save()
+    print "test", player.frame_num_start
+    print "test", player.frame_num_stop
+    
         #[linenum, frame.stdout.read(), date, time] 
         
 #    print "request ",request.POST
