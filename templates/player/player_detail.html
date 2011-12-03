@@ -1,0 +1,63 @@
+<p> detail </p>
+<h1>{{ player.question }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/player/{{ player.id }}/vote/" method="post">
+{% csrf_token %}
+{% for choice in player.choice_set.all %}
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+    <label for="choice{{ forloop.counter }}">{{ choice.choice }}</label><br />
+{% endfor %}
+<input type="submit" value="Vote" />
+</form>
+
+
+<html>
+  <head>
+    <title>Tralf Player</title>
+    <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}Dart_GUI/tralf_gui.css"/>
+  </head>
+  <header>
+    <h1>Tralf Player</h1>
+  </header>
+  <body>
+    <script type="text/javascript" src="{{ STATIC_URL }}Dart_GUI/tralf_gui.dart.app.js"></script>
+    <section id="player">
+<div id="screen">p</div>
+  <div class="fframe_button" id="fframe">|<<<</div>
+  <div class="pframe_button" id="pframe">|<</div>
+  <div class="play_button" id="play">></div>
+  <div class="stop_button" id="stop">#</div>
+  <div class="nframe_button" id="nframe">>|</div>
+  <div class="lframe_button" id="lframe">>>>|</div>
+  <div class="label" id="fnum"></div>
+  <div class="label" id="fdate"></div>
+  <div class="label" id="ftime"></div>
+</section>
+</body>
+</html>
+
+<section id="tralf_data" hidden>
+{% if frame_list %}
+{% for frame in frame_list %}
+    <div id='f{{forloop.counter0}}'class="frame">
+        <div class="edit_loc">{{frame.line_num_mod}}</div>
+        <div class="date">{{frame.commit_dtime.date}}</div>
+        <div class="time">{{frame.commit_dtime.hour}} : {{frame.commit_dtime.minute}} : {{frame.commit_dtime.second}}</div>
+        <div class="content">{{ frame.frame }}
+        </div>
+    </div>
+{% endfor %}    
+{% else %}
+<p>No player is available.</p>
+{% endif %}
+
+
+</section>
+
+
+
+
+
+
