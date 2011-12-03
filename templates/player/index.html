@@ -1,14 +1,13 @@
-<p> test </p>
-<h1>{{ player.question }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
-
+<!--
 <form action="/player/loadnewplayer/" method="post" enctype="multipart/form-data">
 {% csrf_token %}
     <input type="text" name="text_ob" id="name"/>
     <label for="name">"filename"</label><br />
 <input type="submit" value="inject into database" />
 </form>
+-->
 
 <!-- form needs this for the file to contain data: enctype="multipart/form-data" -->
 

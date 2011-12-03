@@ -6,7 +6,7 @@ from filebrowser.fields import FileBrowseField
 from filebrowser.sites import * 
 import sys, zipfile, os, os.path
 import shutil 
-
+import HTML_CONV
 
 # Create your models here.
 class Player(models.Model):
@@ -147,7 +147,8 @@ class Media(models.Model):
                 frame_time = disp[3] 
                 [year, month, day] = frame_dtime.split('-')
                 [hour, minute, second] = frame_time.split(':')
-        
+                      
+                frame_text = HTML_CONV.plaintext2html(frame_text)
                 print "frame dtime:",frame_dtime
                 print "frame time:",frame_time
                 print "year:",year

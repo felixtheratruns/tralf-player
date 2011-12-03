@@ -1,4 +1,4 @@
-<p> detail </p>
+<p> Tralf Player </p>
 <h1>{{ player.question }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
@@ -45,7 +45,10 @@
         <div class="edit_loc">{{frame.line_num_mod}}</div>
         <div class="date">{{frame.commit_dtime.date}}</div>
         <div class="time">{{frame.commit_dtime.hour}} : {{frame.commit_dtime.minute}} : {{frame.commit_dtime.second}}</div>
-        <div class="content">{{ frame.frame }}
+        <div class="content">
+    {% autoescape off %}
+        {{ frame.frame }}
+    {% endautoescape %}   
         </div>
     </div>
 {% endfor %}    

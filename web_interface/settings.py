@@ -62,7 +62,6 @@ STATIC_ROOT = '/home/joel/tralf/django_tralf_interface/web_interface/static'
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
 STATIC_URL = '/static/'
-DART_URL = STATIC_URL + 'Dart_GUI/'
 
 
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
