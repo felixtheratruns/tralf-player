@@ -2,11 +2,13 @@ class TralfGUI {
   var tralf_data;
   var screenDOM;
   var cur_frame;
+  var paused;
   
   TralfGUI() {
     screenDOM = document.query("#screen");
     tralf_data = document.query("#tralf_data");
     cur_frame = 0;
+    paused = true;
   }
 
   set screen(mes) => screenDOM.innerHTML = "<div id=\"frame\">" + mes + "</div>";
@@ -51,7 +53,7 @@ class TralfGUI {
     document.query("#fnum").innerHTML = i;
     document.query("#fdate").innerHTML = cframe.queryAll(".date")[0].innerHTML;
     document.query("#ftime").innerHTML = cframe.queryAll(".time")[0].innerHTML;
-    document.query("#focus").scrollIntoView();
+    if(cedit > 0) {document.query("#focus").scrollIntoView();} //Need to write function so it also check if outside of upper frame range
   }
   
   get frame() => cur_frame;
@@ -59,28 +61,48 @@ class TralfGUI {
   get frame_count() => tralf_data.queryAll(".frame").length;
   
   
+  void input_frame_num() {
+    document.window.alert("Oh Shit!");
+  }
+  
   void load() {
     message = "Buffering . . .";
     frame = 0;
+    play();
+  }
+  
+  int _MSSinceThen(then) {
+    return ((Clock.now() - then)* 1000) ~/ Clock.frequency();
   }
   
   void play() {
-    message = "trying";
-    var sw = new StopWatch();
-    sw.start();
-    for(var i = 0; i < 10; i++) {
-      message = "In loop";
-      message = sw.elapsedInMS;
-      while (sw.elapsedInMS() < 100) {
-        message = sw.elapsedInMS();
-      }
-      sw.stop();
-      frame = i;
-      sw.elapsed = 0;
-      sw.start();
+    if(paused) {
+      paused = false;
+      var pb = document.query("#play");
+      pb.innerHTML = "||";
+      pb.classes.remove("play_button");
+      pb.classes.add("pause_button");
+      auto_next();
     }
-   
-    
+    else {pause();}
+  }
+  
+  void auto_next() {
+    document.window.setTimeout(() {
+      if(frame < frame_count-1 && !paused) {
+        next();
+        auto_next();
+      }
+      else {pause();}
+    }, 300);
+  }
+  
+  void pause() {
+    var pb = document.query("#play");
+    pb.innerHTML = ">";
+    pb.classes.remove("pause_button");
+    pb.classes.add("play_button");
+    paused = true;
   }
   
   void first() {
@@ -88,6 +110,7 @@ class TralfGUI {
   }
   
   void last() {//Need to check for exceptions
+    pause();
     frame = frame_count-1;
   }
   
@@ -109,6 +132,9 @@ class TralfGUI {
     document.on.keyDown.add((e) {
       if (e.which == 39) {next();}
       if (e.which == 37) {prev();}
+      if (e.which == 32) {play();}
+      if (e.which == 36) {first();}
+      if (e.which == 35) {last();}
     });
     
     document.query("#bplay").on.click.add((e) {
@@ -127,16 +153,16 @@ class TralfGUI {
       play();
     });
     
-    document.query("#stop").on.click.add((e) {
-      stop();
-    });
-    
     document.query("#nframe").on.click.add((e) {
       next();
     });
     
     document.query("#lframe").on.click.add((e) {
       last();
+    });
+    
+    document.query("#fnum").on.click.add((e) {
+      input_frame_num();
     });
     
   }
