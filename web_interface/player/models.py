@@ -48,15 +48,14 @@ class Media(models.Model):
 
         print list(kwargs.iterkeys())
         print kwargs['file'].extension
+       
+        
+        
+ 
         if kwargs['file'].extension == ".zip":
-            # Note: this doesn't test for corrupt zip files. 
-            # If encountered, user will get an HTTP Error 
-            # and file will remain on the server.
-
-            # We get returned relative path names from Filebrowser
             
-            path = kwargs['path']
             thefile = kwargs['file'] 
+
             # Convert file and dir into absolute paths
             fullpath = os.path.join(settings.MEDIA_ROOT,settings.FILEBROWSER_DIRECTORY,str(thefile))
 #            print "full path"+fullpath
@@ -101,34 +100,22 @@ class Media(models.Model):
             except:
                 pass
            
-            print "before os path",fullpath  
             file_path = os.path.splitext(fullpath)[0]
-            print "file_path"+file_path
             file_name = os.path.basename(file_path)
-            print "file name:"+file_name
             player = Player(question="Do you like "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=0)
         
             player.save() 
             choice1 = Choice(player=player, choice="like", votes=0)
             choice1.save()
         
-               
-             
-            print "player save"
             player_id = player.id
-        
-        #    player = get_object_or_404(Player, pk=player_id)
-                    
-            print "before django" 
-
+            
             try:
                 Interface = DjangoInterface(file_path)
             except:
                 e = sys.exc_info()[1] 
                 print e
-            
-         #  p = get_object_or_404(player, pk=player_id)
-            print "A" 
+           
             mode = 1
             u_input = 0
             print_height = 30
@@ -155,7 +142,6 @@ class Media(models.Model):
                 print "month:", month
                 print "day:",day
                 print "player?",player_id
-                print frame_text
                 
                 frame = Frame(player=player, 
                                     line_num_mod=int(frame_line),
@@ -170,14 +156,16 @@ class Media(models.Model):
         
                 disp = Interface.nFrameButton()
             print "frame start num",frame_id_start
-            print "frame start num",frame_id_stop 
+            print "frame stop num",frame_id_stop 
             player.frame_num_start = frame_id_start
             player.frame_num_stop = frame_id_stop
         
             player.save()
-     
+                 
     # Signal provided by FileBrowser on every successful upload. 
     FileBrowserSite.filebrowser_post_upload.connect(post_upload_callback)
 
+
+#    results(None,player_id) 
 #    commit_time = models.
 

@@ -119,10 +119,11 @@ class GitManager():
         
         self.fname = path.split('/')[-1]
         directory = os.path.dirname(path)
-        hdir = directory +"/.tralf/"
-        if not os.path.exists(hdir):
-            print "Error: No Tralf data directory found!"
-        self.dirname = hdir + "." + self.fname + "/"  #Check for .<fname>.tralf/.<fiename>
+        path = directory + "/" + "." + self.fname +"/"
+        if not os.path.exists(path):
+            print "Error: Does not exist!"
+        self.dirname = path  
+        print "dirname............:"+self.dirname
         os.chdir(self.dirname)
         self.change_index = self._buildTable()
 
