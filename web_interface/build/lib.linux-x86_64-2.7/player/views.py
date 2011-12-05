@@ -10,20 +10,21 @@ import settings
 import os.path
 import sys
 
-#
-#def index(request):
-#    latest_player_list = Player.objects.all().order_by('-pub_date')[:5]
-#    return render_to_response('player/index.html', {'latest_player_list': latest_player_list})
-#    
-#def detail(request, player_id):
-#    p = get_object_or_404(Player, pk=player_id)
-#    return render_to_response('player/detail.html', {'player': p}, context_instance=RequestContext(request))
-#
-     
+
+def index(request):
+    latest_player_list = Player.objects.all().order_by('-pub_date')[:5]
+    return render_to_response('player/index.html', {'latest_player_list': latest_player_list},context_instance=RequestContext(request))
+    
+def player_detail(request, pk):
+    p = get_object_or_404(Player, pk=pk)
+    frames = Frame.objects.filter(player=p) 
+    print "frames.......:"
+    print frames
+
+    return render_to_response('player/player_detail.html', {'player': p, 'frame_list' : frames}, context_instance=RequestContext(request))
+
+    
 def loadnewplayer(request):
-    #    print "request ",request.POST
-    for key in request.POST.iterkeys():
-        print "key:"+key
     
     file_name = request.POST['text_ob']
     full_path = os.path.join(settings.MEDIA_ROOT,settings.FILEBROWSER_DIRECTORY,file_name)
@@ -104,14 +105,14 @@ def loadnewplayer(request):
 #    interface = DjangoInterface(file_ob.temporary_file_path)    
 #
 #    player = Player.objects.create(question="how is "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=1)
-    return HttpResponseRedirect(reverse('player_results', args=(player.id,)))
+    return HttpResponseRedirect(reverse('player.views.results', args=(player.id,)))
    
 
-#
-#def results(request, player_id):
-#    p = get_object_or_404(Player, pk=player_id)
-#    return render_to_response('player/results.html', {'player': p})
-#
+
+def results(request, pk):
+    p = get_object_or_404(Player, pk=pk)
+    return render_to_response('player/results.html', {'player': p})
+
 
 def vote(request, player_id):
     p = get_object_or_404(Player, pk=player_id)
@@ -129,5 +130,5 @@ def vote(request, player_id):
         # Always return an HttpResponseRedirect after successfully dealing
         # with POST data. This prevents data from being posted twice if a
         # user hits the Back button.
-        return HttpResponseRedirect(reverse('player_results', args=(p.id,)))
+        return HttpResponseRedirect(reverse('player.views.results', args=(p.id,)))
 
