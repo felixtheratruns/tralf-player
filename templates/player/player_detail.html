@@ -2,11 +2,11 @@
 
 <html>
   <head>
-    <title>Tralf Player</title>
+    <title> Tralf Player: "{{player.file_name}}"</title>
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}Dart_GUI/tralf_gui.css"/>
   </head>
   <header>
-    <h1>Tralf Player</h1>
+    <h1>Tralf Player: "{{player.file_name}}"</h1>
   </header>
   <body>
     <script type="text/javascript" src="{{ STATIC_URL }}Dart_GUI/tralf_gui.dart.app.js"></script>
@@ -48,6 +48,19 @@
 
 
 </section>
+
+<h1>{{ player.question }}</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="/player/{{ player.id }}/vote/" method="post">
+{% csrf_token %}
+{% for choice in player.choice_set.all %}
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}" />
+    <label for="choice{{ forloop.counter }}">{{ choice.choice }}</label><br />
+{% endfor %}
+<input type="submit" value="Vote" />
+</form>
 
 
 
