@@ -83,7 +83,7 @@
                 onComplete: function(id, fileName, resp){
                     if (resp.success) {
                         this.getItem(id).fadeOut('slow');
-                        window.location = "http://127.0.0.1:8000/player/"
+                        window.location = "http://127.0.0.1:8000/player/current_player_redirect"
                     }
                 },
                 showMessage: function(message){ alert(message); }

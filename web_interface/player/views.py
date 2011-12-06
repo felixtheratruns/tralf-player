@@ -1,4 +1,5 @@
 from django.db import models
+import current_player
 from yoza import *
 from django.shortcuts import render_to_response, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
@@ -10,6 +11,7 @@ import settings
 import os.path
 import sys
 
+CurrentPlayer = current_player.CurrentPlayer
 
 def index(request):
     latest_player_list = Player.objects.all().order_by('-pub_date')[:5]
@@ -22,6 +24,9 @@ def player_detail(request, pk):
     print frames
 
     return render_to_response('player/player_detail.html', {'player': p, 'frame_list' : frames}, context_instance=RequestContext(request))
+
+def current_player_redirect(request):
+    return HttpResponseRedirect("/player/" + str(CurrentPlayer.player_id) + "/")
 
     
 def loadnewplayer(request):

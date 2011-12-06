@@ -23,13 +23,15 @@ from django.core.files.storage import default_storage, FileSystemStorage
 from django.core.exceptions import ImproperlyConfigured
 
 # FILEBROWSER IMPORTS
-from web_interface.player.upload_fn import * 
+from web_interface.player.upload_fn import *
 from filebrowser.settings import *
 from filebrowser.functions import get_breadcrumbs, get_filterdate, get_settings_var, handle_file_upload, convert_filename
 from filebrowser.templatetags.fb_tags import query_helper
 from filebrowser.base import FileListing, FileObject
 from filebrowser.decorators import path_exists, file_exists
 from filebrowser.storage import FileSystemStorageMixin, StorageMixin
+
+
 
 # Add some required methods to FileSystemStorage
 if FileSystemStorageMixin not in FileSystemStorage.__bases__:
@@ -321,6 +323,7 @@ class FileBrowserSite(object):
         """
         Multipe File Upload.
         """
+        print "main upload function ..........."
         query = request.GET
         path = u'%s' % os.path.join(self.directory, query.get('dir', ''))
         
@@ -330,7 +333,7 @@ class FileBrowserSite(object):
             'settings_var': get_settings_var(directory=self.directory),
             'breadcrumbs': get_breadcrumbs(query, query.get('dir', '')),
             'breadcrumbs_title': _(u'Upload'),
-            'site': self
+            'site': self,
         }, context_instance=Context(request, current_app=self.name))
 
     def delete_confirm(self, request):
@@ -518,7 +521,6 @@ class FileBrowserSite(object):
             self.filebrowser_post_upload.send(sender=request, path=request.POST.get('folder'), file=FileObject(smart_unicode(file_name), site=self))
            
             post_upload_callback(sender=request, path=request.POST.get('folder'), file=FileObject(smart_unicode(file_name), site=self))
- 
             # let Ajax Upload know whether we saved it or not
             ret_json = {'success': True, 'filename': filedata.name}
             return HttpResponse(json.dumps(ret_json))

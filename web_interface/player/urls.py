@@ -11,6 +11,7 @@ urlpatterns = patterns('player.views',
     url(r'^loadnewplayer/$', 'loadnewplayer'),
     url(r'^(?P<pk>\d+)/results/$', 'results'),
     url(r'^(?P<player_id>\d+)/vote/$', 'vote'),
+    url(r'^current_player_redirect', 'current_player_redirect'),
     # Example:
     # (r'^mysite/', include('mysite.foo.urls')),
 

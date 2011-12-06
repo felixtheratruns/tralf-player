@@ -1,4 +1,5 @@
 import settings
+import current_player
 from yoza import *
 from player.models import Player, Choice, Frame
 from datetime import datetime
@@ -8,12 +9,17 @@ from filebrowser.fields import FileBrowseField
 import sys, zipfile, os, os.path
 import shutil 
 import HTML_CONV
-      
+
+
+CurrentPlayer = current_player.CurrentPlayer
+
 #    results(None,player_id) 
 #    commit_time = models.
     #...
-file = FileBrowseField("File", max_length=200, directory="shells/",  blank=True, 
-        null=True,help_text="Upload a video/image/swf, zipped slideshow, etc.")
+
+
+#file = FileBrowseField("File", max_length=200, directory="shells/",  blank=True, 
+#        null=True,help_text="Upload a video/image/swf, zipped slideshow, etc.")
     #...
 def post_upload_callback(sender, **kwargs):
     print "helpppppppppppppppppp"    
@@ -91,7 +97,6 @@ def post_upload_callback(sender, **kwargs):
             frame_time = disp[3] 
             [year, month, day] = frame_dtime.split('-')
             [hour, minute, second] = frame_time.split(':')
-            print "html conv fail"     
             frame_text = HTML_CONV.plaintext2html(frame_text)
             print "frame dtime:",frame_dtime
             print "frame time:",frame_time
@@ -126,4 +131,6 @@ def post_upload_callback(sender, **kwargs):
             os.remove(folder_path)
         except:
             pass
- 
+        print "before current player"
+        CurrentPlayer.g(player_id)
+        print "after current player"
