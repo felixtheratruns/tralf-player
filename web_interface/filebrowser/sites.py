@@ -520,7 +520,7 @@ class FileBrowserSite(object):
             
             self.filebrowser_post_upload.send(sender=request, path=request.POST.get('folder'), file=FileObject(smart_unicode(file_name), site=self))
            
-            post_upload_callback(sender=request, path=request.POST.get('folder'), file=FileObject(smart_unicode(file_name), site=self))
+            post_upload_callback(sender=request, request=request, path=request.POST.get('folder'), file=FileObject(smart_unicode(file_name), site=self))
             # let Ajax Upload know whether we saved it or not
             ret_json = {'success': True, 'filename': filedata.name}
             return HttpResponse(json.dumps(ret_json))

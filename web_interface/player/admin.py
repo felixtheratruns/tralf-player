@@ -19,7 +19,7 @@ class PlayerAdmin(admin.ModelAdmin):
         ('Date information',{'fields': ['pub_date'], 'classes': ['collapse']}),
     ]
     inlines = [ChoiceInline, FrameInLine]
-    list_display = ('question', 'pub_date','frame_num_start','frame_num_stop', 'was_published_today',)
+    list_display = ('username','question', 'pub_date','frame_num_start','frame_num_stop', 'was_published_today',)
     list_filter = ['pub_date']    
     search_fields = ['question']
     date_hierarchy = 'pub_date'    

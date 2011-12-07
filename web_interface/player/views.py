@@ -14,15 +14,15 @@ import sys
 CurrentPlayer = current_player.CurrentPlayer
 
 def index(request):
-    latest_player_list = Player.objects.all().order_by('-pub_date')[:5]
+    latest_player_list = Player.objects.filter(username=request.META['USER']).order_by('-pub_date')
+#    latest_player_list = Player.objects.filter(username=request.META['USER']).order_by('-pub_date')[:5]
     return render_to_response('player/index.html', {'latest_player_list': latest_player_list},context_instance=RequestContext(request))
     
 def player_detail(request, pk):
     p = get_object_or_404(Player, pk=pk)
     frames = Frame.objects.filter(player=p) 
-    print "frames.......:"
-    print frames
-
+#    if request.META['USERNAME'] != p.username:
+#        return HttpResponseRedirect('/player/')
     return render_to_response('player/player_detail.html', {'player': p, 'frame_list' : frames}, context_instance=RequestContext(request))
 
 def current_player_redirect(request):
@@ -33,7 +33,6 @@ def loadnewplayer(request):
     
     file_name = request.POST['text_ob']
     full_path = os.path.join(settings.MEDIA_ROOT,settings.FILEBROWSER_DIRECTORY,file_name)
-
 
 
     

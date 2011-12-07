@@ -11,6 +11,7 @@ from django.http import HttpResponseRedirect
 
 # Create your models here.
 class Player(models.Model):
+    username = models.CharField(max_length=100, default='public')
     question = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date published')
 #    def __init__(self, filename):

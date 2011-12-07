@@ -22,23 +22,18 @@ CurrentPlayer = current_player.CurrentPlayer
 #        null=True,help_text="Upload a video/image/swf, zipped slideshow, etc.")
     #...
 def post_upload_callback(sender, **kwargs):
-    print "helpppppppppppppppppp"    
-    print kwargs
-    print "after print kwargs"
     for key in kwargs.iterkeys():
         print key
 
-    print "after stufffffff"
     if kwargs['file'].extension == ".zip":
         
         thefile = kwargs['file'] 
 
         # Convert file and dir into absolute paths
-        print "full path fails"
         print settings.MEDIA_ROOT
         print settings.FILEBROWSER_DIRECTORY
         fullpath = os.path.join(settings.MEDIA_ROOT,settings.FILEBROWSER_DIRECTORY,str(thefile))
-        print "full path"+fullpath
+        print "full path: "+fullpath
 
         dirname = os.path.dirname(fullpath)
         try:
@@ -63,14 +58,13 @@ def post_upload_callback(sender, **kwargs):
       
         file_path = os.path.splitext(fullpath)[0]
         file_name = os.path.basename(file_path)
-        player = Player(question="Do you like "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=0)
-   
+        username = kwargs['request'].META['USER']
+        player = Player(username = username, question="Do you like "+file_name+" ?",  pub_date=datetime.now(),  file_name=file_name, frame_num_start=0, frame_num_stop=0)
         player.save() 
         choice1 = Choice(player=player, choice="like", votes=0)
         choice1.save()
    
         player_id = player.id
-       
         try:
             Interface = DjangoInterface(file_path)
         except:
@@ -80,15 +74,12 @@ def post_upload_callback(sender, **kwargs):
         mode = 1
         u_input = 0
         print_height = 30
-        print "before refresh"
         disp = Interface.refresh()
-        print "after refresh" 
         frame_id_start = None
         frame_id_stop = None
         count = 0
         temp = None
         while disp != None:
-            print "working"
             count += 1
             temp = disp
             frame_line = disp[0]
@@ -117,8 +108,8 @@ def post_upload_callback(sender, **kwargs):
                 frame_id_start = frame.id                
     
             disp = Interface.nFrameButton()
-        print "frame start num",frame_id_start
-        print "frame stop num",frame_id_stop 
+        print "frame start num: ",frame_id_start
+        print "frame stop num: ",frame_id_stop 
         player.frame_num_start = frame_id_start
         player.frame_num_stop = frame_id_stop
     
@@ -126,11 +117,8 @@ def post_upload_callback(sender, **kwargs):
         player_id = player.id
         file_dirname = os.path.dirname(file_path)
         folder_path = file_dirname + "/." + file_name + "/"
-        print "folder name"+folder_path 
         try:
             os.remove(folder_path)
         except:
             pass
-        print "before current player"
         CurrentPlayer.g(player_id)
-        print "after current player"
