@@ -124,7 +124,7 @@ def vote(request, player_id):
         selected_choice = p.choice_set.get(pk=request.POST['choice'])
     except (KeyError, Choice.DoesNotExist):
         # Redisplay the player voting form.
-        return render_to_response('player/detail.html', {
+        return render_to_response('player/player_detail.html', {
             'player': p,
             'error_message': "You didn't select a choice.",
         }, context_instance=RequestContext(request))

@@ -1,8 +1,15 @@
-# Django settings for mysite project.
+
 import os
 import sys
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+
+BASE_DIR = '/home/joel/tralf/django_tralf_interface/web_interface/'    # Or path to database file if using sqli
+
+
+
+
 
 ADMINS = (
     # ('Your Name', 'your_email@domain.com'),
@@ -10,12 +17,11 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-BASE_PATH = '/home/joel/tralf/django_tralf_interface/web_interface/'
-
+DB_PATH = BASE_DIR + 'django_db'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': BASE_PATH + 'django_db',                      # Or path to database file if using sqlite3.
+        'NAME': str(DB_PATH),                      # Or path to database file if using sqlite3.
         'USER': '',                      # Not used with sqlite3.
         'PASSWORD': '',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
@@ -48,7 +54,7 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/"
-MEDIA_ROOT = BASE_PATH + 'media' 
+MEDIA_ROOT = BASE_DIR + 'media' 
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash if there is a path component (optional in other cases).
@@ -59,7 +65,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = BASE_PATH + 'static'
+STATIC_ROOT = BASE_DIR + 'static'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -75,7 +81,7 @@ STATICFILES_DIRS = (
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    BASE_PATH + 'static_base',
+    BASE_DIR + 'static_base',
 
 )
 
@@ -120,7 +126,7 @@ ROOT_URLCONF = 'web_interface.urls'
 
 
 TEMPLATE_DIRS = (
-    BASE_PATH + "templates",
+    BASE_DIR + "templates",
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
