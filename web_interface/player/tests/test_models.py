@@ -11,6 +11,8 @@ file_name="test_file"
 frame_num_start=0
 frame_num_stop=0
 username = 'test'
+player1 = None
+
  
 class TestPlayer(unittest.TestCase):
     def setUp(self):
@@ -26,14 +28,13 @@ class TestPlayer(unittest.TestCase):
         # self.assertEqual(expected, player.was_published_today())
         assert False # TODO: implement your test here
 
-    def testAttrib(self):
+    def test_Attrib(self):
         self.assertEqual(self.player1.username, username)
         self.assertEqual(self.player1.question, question)
         self.assertEqual(self.player1.pub_date, pub_date)
         self.assertEqual(self.player1.file_name, file_name)
         self.assertEqual(self.player1.frame_num_start, frame_num_start)
         self.assertEqual(self.player1.frame_num_stop, frame_num_stop)
-
 
 
 

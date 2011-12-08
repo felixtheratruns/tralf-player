@@ -15,5 +15,13 @@ class TestResults(unittest.TestCase):
         # self.assertEqual(expected, results(request, pk))
         assert False # TODO: implement your test here
 
+
+class TestVote(unittest.TestCase):
+    def test_vote(self):
+        # self.assertEqual(expected, vote(request, player_id))
+        assert False # TODO: implement your test here
+
+
+
 if __name__ == '__main__':
     unittest.main()
