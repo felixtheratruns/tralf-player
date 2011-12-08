@@ -4,7 +4,6 @@ from yoza import *
 from player.models import Player, Choice, Frame
 from datetime import datetime
 #filebrowser stuff
-from filebrowser.fields import FileBrowseField
 #from filebrowser.sites import * 
 import sys, zipfile, os, os.path
 import shutil 
