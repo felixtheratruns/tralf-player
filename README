@@ -1,1 +1,18 @@
+Currently trying to fix an issue with python to allow uploading
+However viewing uploaded players currently works.
 
+Install: 
+git clone git@github.com:felixtheratruns/django-tralf-interface.git
+
+
+Then run in django-tralf-interface/web_interface
+python manage.py runserver
+
+then go to:
+http://127.0.0.1:8000/admin/
+
+login:
+username: joel
+password: joel
+
+go to "Players" and watch

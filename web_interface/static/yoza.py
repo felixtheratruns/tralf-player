@@ -148,7 +148,6 @@ class GitManager():
         return self.count
 
     def _buildTable(self):
-        # Soooo. . . this shit here like, pulls up the git log and creates
         # a local table:
         #
         #   ID|GIT HASH|YEAR-MONTH-DAY|HOUR:MINUTE:SECOND|CHANGE_LOC    #
