@@ -10,7 +10,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-BASE_PATH = '/home/joel/tralf/django_tralf_interface/web_interface/'
+BASE_PATH = '/home/joel/django-tralf-interface/web_interface/'
 
 DATABASES = {
     'default': {
@@ -96,7 +96,7 @@ TEMPLATE_LOADERS = (
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-    'django.core.context_processors.auth',
+    'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.request',
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
