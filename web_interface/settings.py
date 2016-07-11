@@ -10,7 +10,7 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-BASE_PATH = '/home/joel/django-tralf-interface/web_interface/'
+BASE_PATH = '/home/joel/tralf-player/web_interface/'
 
 DATABASES = {
     'default': {

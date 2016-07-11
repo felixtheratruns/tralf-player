@@ -4,6 +4,7 @@ However viewing uploaded players currently works.
 Install: 
 git clone git@github.com:felixtheratruns/django-tralf-interface.git
 
+change the BASE_PATH in web_interface/settings.py to your directory
 
 Then run in django-tralf-interface/web_interface
 python manage.py runserver
